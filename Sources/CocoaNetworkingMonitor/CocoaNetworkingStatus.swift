@@ -7,7 +7,7 @@
 
 import Foundation
 
-@objc enum CocoaNetworkingStatus: NSInteger {
+@objc public enum CocoaNetworkingStatus: NSInteger {
     case satisfied = 0
     case unsatisfied
 }

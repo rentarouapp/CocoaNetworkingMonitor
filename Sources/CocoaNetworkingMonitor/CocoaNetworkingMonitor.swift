@@ -6,7 +6,7 @@ import Network
 import Combine
 
 @objcMembers
-final class CocoaNetworkingMonitor: NSObject {
+public final class CocoaNetworkingMonitor: NSObject {
     static let DidChangeStatusNotification = NSNotification.Name(rawValue: "CocoaNetworkingMonitorChangeStatusNotification")
     
     static let shared = CocoaNetworkingMonitor()
