@@ -7,7 +7,7 @@ import Combine
 
 @objcMembers
 public final class CocoaNetworkingMonitor: NSObject {
-    public static let DidChangeStatusNotification = NSNotification.Name(rawValue: "CocoaNetworkingMonitorChangeStatusNotification")
+    public static let DidChangeStatusNotificationName = NSNotification.Name(rawValue: "CocoaNetworkingMonitorChangeStatusNotification")
     public static let shared = CocoaNetworkingMonitor()
     
     private override init() {}
@@ -61,7 +61,7 @@ extension CocoaNetworkingMonitor {
             self.monitoringSubject.send(self.currentStatus)
             // Notification
             DispatchQueue.main.async {
-                NotificationCenter.default.post(name: CocoaNetworkingMonitor.DidChangeStatusNotification, object: nil)
+                NotificationCenter.default.post(name: CocoaNetworkingMonitor.DidChangeStatusNotificationName, object: nil)
             }
         }
         nwPathMonitor.start(queue: DispatchQueue(label: "com.cocoa_networking_monitor.monitoring"))
