@@ -13,14 +13,8 @@ public final class CocoaNetworkingMonitor: NSObject {
     private override init() {}
     
     private var nwPathMonitor = NWPathMonitor()
-    private let monitoringSubject = PassthroughSubject<CocoaNetworkingStatus, Never>()
+    private let monitoringSubject = PassthroughSubject<Bool, Never>()
     
-    private var currentStatus: CocoaNetworkingStatus {
-        if nwPathMonitor.currentPath.status == .satisfied {
-            return .satisfied
-        }
-        return .unsatisfied
-    }
 }
 
 // MARK: - Status Properties
@@ -58,7 +52,7 @@ extension CocoaNetworkingMonitor {
         nwPathMonitor.pathUpdateHandler = { [weak self] path in
             guard let self else { return }
             // Combine
-            self.monitoringSubject.send(self.currentStatus)
+            self.monitoringSubject.send(path.status == .satisfied)
             // Notification
             DispatchQueue.main.async {
                 NotificationCenter.default.post(name: CocoaNetworkingMonitor.DidChangeStatusNotificationName, object: nil)
@@ -71,7 +65,7 @@ extension CocoaNetworkingMonitor {
         nwPathMonitor.cancel()
     }
     
-    public func publisher() -> AnyPublisher<CocoaNetworkingStatus, Never> {
+    public func publisher() -> AnyPublisher<Bool, Never> {
         monitoringSubject.eraseToAnyPublisher()
     }
 }

@@ -18,11 +18,11 @@ public final class CocoaNetworkingProvider: ObservableObject {
     
     
     public init() {
-        publisher.sink { [weak self] status in
+        publisher.sink { [weak self] isReachable in
             guard let self else { return }
             DispatchQueue.main.async {
-                self.isReachable = status == .satisfied
-                self.isShowUnsatisfiedAlert = status == .unsatisfied
+                self.isReachable = isReachable
+                self.isShowUnsatisfiedAlert = !isReachable
             }
         }.store(in: &cancellablesBag)
     }
