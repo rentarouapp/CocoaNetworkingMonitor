@@ -7,9 +7,9 @@ import Combine
 
 @objcMembers
 public final class CocoaNetworkingMonitor: NSObject {
-    static let DidChangeStatusNotification = NSNotification.Name(rawValue: "CocoaNetworkingMonitorChangeStatusNotification")
+    public static let DidChangeStatusNotification = NSNotification.Name(rawValue: "CocoaNetworkingMonitorChangeStatusNotification")
+    public static let shared = CocoaNetworkingMonitor()
     
-    static let shared = CocoaNetworkingMonitor()
     private override init() {}
     
     private let nwPathMonitor = NWPathMonitor()
@@ -25,34 +25,34 @@ public final class CocoaNetworkingMonitor: NSObject {
 
 // MARK: - Status Properties
 extension CocoaNetworkingMonitor {
-    var isReachable: Bool {
+    public var isReachable: Bool {
         nwPathMonitor.currentPath.status == .satisfied
     }
     
-    var isReachableViaWifi: Bool {
+    public var isReachableViaWifi: Bool {
         return isReachable && nwPathMonitor.currentPath.usesInterfaceType(.wifi)
     }
     
-    var isReachableViaCellular: Bool {
+    public var isReachableViaCellular: Bool {
         return isReachable && nwPathMonitor.currentPath.usesInterfaceType(.cellular)
     }
     
-    var isReachableViaEthernet: Bool {
+    public var isReachableViaEthernet: Bool {
         return isReachable && nwPathMonitor.currentPath.usesInterfaceType(.wiredEthernet)
     }
     
-    var isReachableViaLoopback: Bool {
+    public var isReachableViaLoopback: Bool {
         return isReachable && nwPathMonitor.currentPath.usesInterfaceType(.loopback)
     }
     
-    var isReachableViaOther: Bool {
+    public var isReachableViaOther: Bool {
         return isReachable && nwPathMonitor.currentPath.usesInterfaceType(.other)
     }
 }
 
 // MARK: - Methods
 extension CocoaNetworkingMonitor {
-    func setup() {
+    public func setup() {
         nwPathMonitor.pathUpdateHandler = { [weak self] path in
             guard let self else { return }
             // Combine
@@ -64,15 +64,15 @@ extension CocoaNetworkingMonitor {
         }
     }
     
-    func startMonitoring() {
+    public func startMonitoring() {
         nwPathMonitor.start(queue: DispatchQueue(label: "com.cocoa_networking_monitor.monitoring"))
     }
     
-    func cancelMonitoring() {
+    public func cancelMonitoring() {
         nwPathMonitor.cancel()
     }
     
-    func publisher() -> AnyPublisher<CocoaNetworkingStatus, Never> {
+    public func publisher() -> AnyPublisher<CocoaNetworkingStatus, Never> {
         monitoringSubject.eraseToAnyPublisher()
     }
 }
