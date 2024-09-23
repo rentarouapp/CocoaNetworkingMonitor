@@ -12,7 +12,7 @@ public final class CocoaNetworkingMonitor: NSObject {
     
     private override init() {}
     
-    private let nwPathMonitor = NWPathMonitor()
+    private var nwPathMonitor = NWPathMonitor()
     private let monitoringSubject = PassthroughSubject<CocoaNetworkingStatus, Never>()
     
     private var currentStatus: CocoaNetworkingStatus {
@@ -52,7 +52,9 @@ extension CocoaNetworkingMonitor {
 
 // MARK: - Methods
 extension CocoaNetworkingMonitor {
-    public func setup() {
+    public func startMonitoring() {
+        // Once you cancel a path monitor, that specific object is done. You can’t start it again. You will need to create a new path monitor
+        nwPathMonitor = NWPathMonitor()
         nwPathMonitor.pathUpdateHandler = { [weak self] path in
             guard let self else { return }
             // Combine
@@ -62,9 +64,6 @@ extension CocoaNetworkingMonitor {
                 NotificationCenter.default.post(name: CocoaNetworkingMonitor.DidChangeStatusNotification, object: nil)
             }
         }
-    }
-    
-    public func startMonitoring() {
         nwPathMonitor.start(queue: DispatchQueue(label: "com.cocoa_networking_monitor.monitoring"))
     }
     
