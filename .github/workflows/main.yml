@@ -1,0 +1,28 @@
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# env:
+#   destination: 'platform=iOS Simulator,name=iPhone 14 Pro,OS=16.0'
+
+jobs:
+  # build:
+  #   runs-on: macOS-latest
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Build
+  #     run: swift build -v
+
+  test:
+    runs-on: macOS-latest
+    steps:
+    - uses: swift-actions/setup-swift@65540b95f51493d65f5e59e97dcef9629ddf11bf
+      with:
+        swift-version: "5.8.0"
+    - name: Get swift version
+      run: swift --version # Swift 5.3.3
+    - name: Test
+      #run: swift test
+      run: xcodebuild -scheme CocoaNetworkingMonitor test -destination "name=iPhone XS" | xcpretty
