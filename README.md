@@ -18,7 +18,7 @@ let package = Package(
     ]
 )
 ```
-#### Package
+#### Xcode GUI
 
 You can add this package on Xcode.
 
